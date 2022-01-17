@@ -1,7 +1,12 @@
 {
-  "dependencies": {
-    "@slack/web-api": "^6.5.1"
+  "scripts": {
+    "start": "nodemon"
   },
+  "dependencies": {
+    "@slack/web-api": "^6.5.1",
+    "dotenv": "^14.0.1"
+  },
+  "type": "module",
   "name": "slack-bot",
   "version": "1.0.0",
   "description": "Test Slack Bot",
