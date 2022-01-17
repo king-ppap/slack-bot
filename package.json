@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "@slack/web-api": "^6.5.1"
+  },
+  "name": "slack-bot",
+  "version": "1.0.0",
+  "description": "Test Slack Bot",
+  "main": "index.js",
+  "author": "king-ppap",
+  "license": "MIT"
+}
