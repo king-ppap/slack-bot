@@ -19,7 +19,7 @@ export default async function start() {// Create a new instance of the WebClient
   try {
     // Use the `chat.postMessage` method to send a message from this app
     app.client.chat.postMessage({
-      channel: 'C02UHFK6EMA',
+      channel: process.env.START_CHANEL_ID,
       "attachments": [
         {
           "color": "#F2C94C",
