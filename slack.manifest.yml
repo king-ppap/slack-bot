@@ -9,14 +9,14 @@ features:
     display_name: TestBot
     always_online: false
   shortcuts:
-    - name: Test button msg
-      type: global
-      callback_id: test_button_msg
-      description: test_button_msg
     - name: Open Modal
       type: global
       callback_id: open_modal
       description: Open Modal
+    - name: Test button msg
+      type: global
+      callback_id: test_button_msg
+      description: test_button_msg
 oauth_config:
   scopes:
     bot:
