@@ -1,6 +1,7 @@
 export default {
   help: {
-    name: "QTdeny",
+    id: "QTdeny",
+    name: "Deny quotation",
     description: "Deny quotation",
   },
   handler: async function ({ action, ack, body, client }) {

@@ -1,6 +1,6 @@
 import SlackBolt from "@slack/bolt";
 const { App, LogLevel } = SlackBolt;
-import readActionFiles from "./utilities/readActions.js";
+import { readAllFiles } from "./utilities/botSlack.js";
 
 export default async function start() {// Create a new instance of the WebClient class with the token read from your environment variable
   const app = new App({
@@ -13,28 +13,13 @@ export default async function start() {// Create a new instance of the WebClient
   await app.start();
   console.log('⚡️ Bolt app started');
 
-  // const actions = await readActionFiles("slack/actions");
-  // console.log(actions);
-
-  // await new Promise(
-  //   (resolve, rejects) =>
-  //     actions.forEach(async (action, index, array) => {
-  //       console.log(action.handler);
-  //       app.action(action.help.name, action.handler);
-
-  //       if (index === array.length - 1) resolve();
-  //     })
-  // );
-
-  app.action("QTapprove", async ({ body, ack }) => {
-    console.log("QTAPPROVE", body);
-    await ack();
-  });
+  await readAllFiles(app, "action", "slack/actions");
+  await readAllFiles(app, "shortcut","slack/shortcuts");
 
   try {
     // Use the `chat.postMessage` method to send a message from this app
     app.client.chat.postMessage({
-      channel: 'C02U61FRXSR',
+      channel: 'C02UHFK6EMA',
       "attachments": [
         {
           "color": "#F2C94C",
@@ -46,7 +31,7 @@ export default async function start() {// Create a new instance of the WebClient
               "type": "header",
               "text": {
                 "type": "plain_text",
-                "text": `ใบเสนอราคาเลขที่ QT20220100019 ${new Date().toISOString()}`,
+                "text": `Bot Start ${new Date().toISOString()}`,
                 "emoji": true
               }
             },
@@ -61,7 +46,7 @@ export default async function start() {// Create a new instance of the WebClient
                   "style": "primary",
                   "text": {
                     "type": "plain_text",
-                    "text": "Approve",
+                    "text": "Test Approve",
                     "emoji": true
                   },
                   "value": "idOfQt",
@@ -72,7 +57,7 @@ export default async function start() {// Create a new instance of the WebClient
                   "style": "danger",
                   "text": {
                     "type": "plain_text",
-                    "text": "Deny",
+                    "text": "Test Deny",
                     "emoji": true
                   },
                   "value": "idOfQt",
@@ -157,55 +142,6 @@ export default async function start() {// Create a new instance of the WebClient
 
     if (context.teamId) {
       // Do something with the team's ID for debugging purposes
-    }
-  });
-
-  // The open_modal shortcut opens a plain old modal
-  // Shortcuts require the command scope
-  app.shortcut('open_modal', async ({ ack, payload, client }) => {
-    // Acknowledge shortcut request
-    ack();
-
-    try {
-      // Call the views.open method using the WebClient passed to listeners
-      const result = await client.views.open({
-        trigger_id: payload.trigger_id,
-        view: {
-          "type": "modal",
-          "title": {
-            "type": "plain_text",
-            "text": "My App"
-          },
-          "close": {
-            "type": "plain_text",
-            "text": "Close"
-          },
-          "blocks": [
-            {
-              "type": "section",
-              "text": {
-                "type": "mrkdwn",
-                "text": "About the simplest modal you could conceive of :smile:\n\nMaybe <https://api.slack.com/reference/block-kit/interactive-components|*make the modal interactive*> or <https://api.slack.com/surfaces/modals/using#modifying|*learn more advanced modal use cases*>."
-              }
-            },
-            {
-              "type": "context",
-              "elements": [
-                {
-                  "type": "mrkdwn",
-                  "text": "Psssst this modal was designed using <https://api.slack.com/tools/block-kit-builder|*Block Kit Builder*>"
-                }
-              ]
-            }
-          ]
-        }
-      });
-
-      console.log(result);
-
-    }
-    catch (error) {
-      console.error(error);
     }
   });
 }

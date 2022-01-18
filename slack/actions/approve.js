@@ -1,6 +1,7 @@
 export default {
   help: {
-    name: "QTapprove",
+    id: "QTapprove",
+    name: "Approve quotation",
     description: "Approve quotation",
   },
   handler: async ({ action, ack, respond }) => {
