@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "nodemon"
+    "start": "nodemon --trace-warnings"
   },
   "dependencies": {
     "@slack/bolt": "^3.8.1",

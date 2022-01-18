@@ -1,83 +1,35 @@
 import SlackBolt from "@slack/bolt";
-const { App } = SlackBolt;
+const { App, LogLevel } = SlackBolt;
+import readActionFiles from "./utilities/readActions.js";
 
 export default async function start() {// Create a new instance of the WebClient class with the token read from your environment variable
   const app = new App({
     token: process.env.SLACK_BOT_TOKEN,
     appToken: process.env.SLACK_APP_TOKEN,
     socketMode: true,
-    logLevel: "debug",
+    logLevel: LogLevel.DEBUG,
   });
 
   await app.start();
   console.log('⚡️ Bolt app started');
 
-  app.action('approve', async ({ action, ack, respond }) => {
-    console.log("approveapproveapproveapproveapproveapprove");
-    await respond(JSON.stringify(action, null, "\t"));
+  // const actions = await readActionFiles("slack/actions");
+  // console.log(actions);
+
+  // await new Promise(
+  //   (resolve, rejects) =>
+  //     actions.forEach(async (action, index, array) => {
+  //       console.log(action.handler);
+  //       app.action(action.help.name, action.handler);
+
+  //       if (index === array.length - 1) resolve();
+  //     })
+  // );
+
+  app.action("QTapprove", async ({ body, ack }) => {
+    console.log("QTAPPROVE", body);
     await ack();
-    // Update the message to reflect the action
   });
-
-  app.action('deny', async ({ action, ack, body, client }) => {
-    try {
-      // Call views.open with the built-in client
-      const result = await client.views.open({
-        // Pass a valid trigger_id within 3 seconds of receiving it
-        trigger_id: body.trigger_id,
-        // View payload
-        view: {
-          type: 'modal',
-          // View identifier
-          callback_id: 'view_1',
-          title: {
-            type: 'plain_text',
-            text: 'Modal title'
-          },
-          blocks: [
-            {
-              type: 'section',
-              text: {
-                type: 'mrkdwn',
-                text: 'Welcome to a modal with _blocks_'
-              },
-              accessory: {
-                type: 'button',
-                text: {
-                  type: 'plain_text',
-                  text: 'Click me!'
-                },
-                action_id: 'button_abc'
-              }
-            },
-            {
-              type: 'input',
-              block_id: 'input_c',
-              label: {
-                type: 'plain_text',
-                text: 'What are your hopes and dreams?'
-              },
-              element: {
-                type: 'plain_text_input',
-                action_id: 'dreamy_input',
-                multiline: true
-              }
-            }
-          ],
-          submit: {
-            type: 'plain_text',
-            text: 'Submit'
-          }
-        }
-      });
-      ack();
-      console.log(result);
-    }
-    catch (error) {
-      console.error(error);
-    }
-  });
-
 
   try {
     // Use the `chat.postMessage` method to send a message from this app
@@ -94,7 +46,7 @@ export default async function start() {// Create a new instance of the WebClient
               "type": "header",
               "text": {
                 "type": "plain_text",
-                "text": "ใบเสนอราคาเลขที่ QT20220100019",
+                "text": `ใบเสนอราคาเลขที่ QT20220100019 ${new Date().toISOString()}`,
                 "emoji": true
               }
             },
@@ -113,7 +65,7 @@ export default async function start() {// Create a new instance of the WebClient
                     "emoji": true
                   },
                   "value": "idOfQt",
-                  "action_id": "approve"
+                  "action_id": "QTapprove"
                 },
                 {
                   "type": "button",
@@ -124,7 +76,7 @@ export default async function start() {// Create a new instance of the WebClient
                     "emoji": true
                   },
                   "value": "idOfQt",
-                  "action_id": "deny"
+                  "action_id": "QTdeny"
                 }
               ]
             },
@@ -199,6 +151,15 @@ export default async function start() {// Create a new instance of the WebClient
     console.log(error);
   }
 
+  app.error(({ error, logger, context, body }) => {
+    // Log the error using the logger passed into Bolt
+    logger.error(error);
+
+    if (context.teamId) {
+      // Do something with the team's ID for debugging purposes
+    }
+  });
+
   // The open_modal shortcut opens a plain old modal
   // Shortcuts require the command scope
   app.shortcut('open_modal', async ({ ack, payload, client }) => {
@@ -241,6 +202,7 @@ export default async function start() {// Create a new instance of the WebClient
       });
 
       console.log(result);
+
     }
     catch (error) {
       console.error(error);
