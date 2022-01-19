@@ -36,7 +36,7 @@ async function readAllFiles(app, type, pathA) {
             throw new Error('Please provide handler')
           }
         } catch (error) {
-          console.log(`❌ ${value} not load. ${error.message}`);
+          console.log(`  ❌ ${value} not load. ${error.message}`);
           return;
         }
 
