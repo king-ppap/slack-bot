@@ -1,6 +1,6 @@
 import SlackBolt from "@slack/bolt";
 const { App, LogLevel } = SlackBolt;
-import { readAllFiles } from "./utilities/bot_slack.js";
+import { readAllFiles } from "./utils/bot_slack.js";
 
 export default async function start() {// Create a new instance of the WebClient class with the token read from your environment variable
   const app = new App({
